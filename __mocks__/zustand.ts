@@ -26,6 +26,14 @@ function createStoreUncurried<T>(stateCreator: StateCreator<T>): StoreApi<T> {
   return store;
 }
 
+afterEach(() => {
+  act(() => {
+    STORE_RESET_FUNCTIONS.forEach((resetFn) => {
+      resetFn();
+    });
+  });
+});
+
 export function create<T>(stateCreator: StateCreator<T>): UseBoundStore<StoreApi<T>> {
   if (typeof stateCreator === 'function') {
     return createUncurried(stateCreator);
@@ -39,11 +47,3 @@ export function createStore<T>(stateCreator: StateCreator<T>): StoreApi<T> {
   }
   return createStoreUncurried as unknown as StoreApi<T>;
 }
-
-afterEach(() => {
-  act(() => {
-    STORE_RESET_FUNCTIONS.forEach((resetFn) => {
-      resetFn();
-    });
-  });
-});
